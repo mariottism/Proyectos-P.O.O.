@@ -1,3 +1,12 @@
+/* Como se ve una clase Básica
+Aqui entendemos:
+Encapsulamiento → private
+Constructor → inicializa objetos
+this → referencia al objeto actual
+Getters → leer datos
+Setters → modificar con control
+Métodos → comportamiento del objeto */
+
 public class Mascota {
 
     // Atributos privados → encapsulamiento
