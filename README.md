@@ -96,7 +96,18 @@ Mientras que un JuniorDoctor solo hereda y se guarda en la lista de doctores, el
 Implementación de Herencia con Especialización. ConsultantDoctor extiende la funcionalidad de Doctor al establecer una relación de liderazgo con un Team. Utiliza la palabra clave super para la reutilización de código y mantiene la integridad referencial mediante el método setTeamLeader.
 
 ----CLASE Ward----
+¿Por qué es clave esta clase para el Main?
+Navegación para Reportes:
 
+En el Main: Al final se ejecutan métodos como numberDoctorsPatient().
+
+Por qué: Si miras el código del Hospital que pasamos antes, verás que el profesor hace un for (Ward ward : this.wards). El Hospital entra a cada pabellón, le pide su lista de pacientes (getPatients()) y luego analiza a cada paciente. Sin esta clase, no habría forma de llegar a los pacientes desde el Hospital.
+
+El "Match" con el Constructor de Patient:
+
+Cuando el Main ejecuta hospital.addPatient(hospital.getWard(10), ...), el Hospital busca el objeto Ward con ID 10 y se lo pasa al nuevo paciente. El paciente, al nacer, se mete a sí mismo en la lista de ese Ward usando el método que acabamos de comentar.
+
+La clase Ward representa la unidad organizativa de pacientes en el sistema. Implementa la gestión de colecciones mediante ArrayList y asegura la integridad referencial permitiendo que los objetos Patient se registren a sí mismos en el pabellón asignado durante su creación.
 
 
 ----CLASE Appoiment---
