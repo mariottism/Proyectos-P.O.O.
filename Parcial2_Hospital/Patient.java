@@ -1,51 +1,85 @@
-import java.util.ArrayList;
-
 public class Patient {
-    // Atributos simples
+    
+    // ATRIBUTOS: Representan las flechas que salen de Patient en el UML.
     private int id;
+    private Team team; // Relación 1:1 con un equipo.
+    private Ward ward; // Relación 1:1 con un pabellón.
     
-    // Relaciones 1 a 1 (Agregación: el objeto viene de afuera)
-    private Ward ward;
-    private Team team;
-    
-    // Relaciones 1 a muchos (Multiplicidad 0..* por ende usamos ArrayList)
+    // Multiplicidad 0..*: Se usan listas para guardar muchas citas y muchos doctores.
+    private ArrayList<Appoiment> appoiments;
     private ArrayList<Doctor> doctors;
-    private ArrayList<Appoiment> appoiments; // Nota: El main lo escribe 'Appoiment'
 
-  // Constructor
-    public Patient(int id) {
+    // CONSTRUCTOR: recibe el equipo y el pabellón de una vez.
+    public Patient(int id, Team team, Ward ward) {
         this.id = id;
-        // Inicializar listas SIEMPRE en el constructor
-        this.doctors = new ArrayList<>();
+        this.team = team;
+        this.ward = ward;
+        
+        // Inicializar SIEMPRE las listas para evitar NullPointerException.
         this.appoiments = new ArrayList<>();
+        this.doctors = new ArrayList<>();
+        
+        /* RELACIÓN BIDIRECCIONAL es clave!
+         * No basta con que el Paciente sepa en qué Equipo está. 
+         * El Equipo también debe saber que tiene un nuevo Paciente
+         * Al hacer 'this.team.addPatient(this)', el paciente se "anota" a sí mismo 
+         * en la lista del equipo y del pabellón apenas nace.
+         */
+        this.team.addPatient(this);
+        this.ward.addPatient(this);
     }
 
-    // Métodos para establecer las relaciones (Agregación)
-    public void setWard(Ward ward) { 
-      this.ward = ward;
+    // MÉTODOS DE ACCIÓN
+    
+    // addDoctor: Antes de añadir, verifica si el doctor ya estaba (contains).
+    // Esto evita que un paciente tenga al mismo doctor repetido en su lista.
+    public boolean addDoctor(Doctor doctor) {
+        if (!this.doctors.contains(doctor)) {
+            this.doctors.add(doctor);
+            return true;
+        }
+        return false;
     }
-    public void setTeam(Team team) { 
-      this.team = team; 
+    
+    public boolean addAppoiment(Appoiment appoiment) {
+        if (!this.appoiments.contains(appoiment)) {
+            this.appoiments.add(appoiment);
+            return true;
+        }
+        return false;
     }
 
-    // Métodos para añadir a las listas (Paso a paso del Main)
-    public void addDoctor(Doctor d) {
-        this.doctors.add(d);
+    /* MÉTODOS PARA REPORTES (Lo que el Main imprime)
+     * En lugar de devolver la lista completa, devolvemos solo lo que el Main pide.
+     */
+    
+    // Recorre las citas y extrae solo los IDs de los doctores involucrados.
+    // Útil para el listado final de "Patient X has an appoiment with doctor Y".
+    public ArrayList<Integer> getDoctorsId() {
+        ArrayList<Integer> doctorsId = new ArrayList<>();
+        for (Appoiment appoiment : this.appoiments) {
+            doctorsId.add(appoiment.getDoctor().getId());
+        }
+        return doctorsId;
     }
 
-    public void addAppoiment(Appoiment a) {
-        this.appoiments.add(a);
+    // Encapsulamiento: El Hospital no cuenta las citas, le pregunta al Paciente cuántas tiene.
+    public int numberOfAppoiments() {
+        return this.appoiments.size();
     }
 
-    // Getters necesarios para los reportes finales
-    public int getId() {
-      return id; 
+    public int numberOfDoctors() {
+        return this.doctors.size();
     }
-    public ArrayList<Doctor> getDoctors() { 
-      return doctors; 
+    
+    // Getters estándar para que el Hospital pueda consultar datos.
+    public int getId() { 
+        return id;
     }
-    public ArrayList<Appoiment> getAppoiments() {
-      return appoiments;
+    public Team getTeam() { 
+        return team; 
     }
-  
+    public Ward getWard() { 
+        return ward;
+    }
 }
