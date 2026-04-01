@@ -36,7 +36,7 @@ public class Hospital {
   // Aquí el Hospital no crea el Ward ni el Team en ese momento, sino que recibe los que ya existen.
   public void addPatient(Ward w, Team t, int patientId) {
     Patient newPatient = new Patient(patientId);
-    
+      
     // Establecemos las relaciones (Agregación)
     newPatient.setWard(w);
     newPatient.setTeam(t);
@@ -46,6 +46,7 @@ public class Hospital {
 }
   // El main pide hospital.numberDoctorsPatient();.
   public void numberDoctorsPatient() {
+      //Para cada elemento p de tipo Patient que esté en mi Lista patients, haz lo siguiente...
     for (Patient p : patients) {
         // p.getDoctors() devuelve el ArrayList de doctores del paciente
         int cantidad = p.getDoctors().size(); 
