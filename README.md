@@ -111,3 +111,17 @@ La clase Ward representa la unidad organizativa de pacientes en el sistema. Impl
 
 
 ----CLASE Appoiment---
+¿Por qué es clave esta clase para el Main?
+El método hospital.assignAppoiment(...):
+
+En el Main: Cuando se ejecuta esta línea, el Hospital busca al paciente y al doctor, y luego simplemente hace new Appoiment(doctor, patient).
+
+La magia: No necesitas guardar la cita en una lista dentro de Hospital. Como el constructor de Appoiment ya se encarga de avisarle al doctor y al paciente, la información queda guardada automáticamente donde pertenece.
+
+El reporte de citas (relationAppoiments):
+
+En el Main: Al final se imprimen las citas.
+
+Lógica: El Hospital le pide al Paciente su lista de citas. El Paciente recorre sus Appoiments, y de cada cita saca el Doctor (getDoctor()) para imprimir su ID.
+
+"Clase de asociación que vincula las entidades Doctor y Patient. Implementa un patrón de notificación automática en el constructor, asegurando que ambos
