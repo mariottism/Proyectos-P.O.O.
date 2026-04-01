@@ -1,56 +1,130 @@
+
 public class Hospital {
+    
     private ArrayList<Team> teams;
     private ArrayList<Ward> wards;
-    private ArrayList<Patient> patients;
-
-  //Constructor con listas inicializadas para evitar errores
+    
+    // Inicialización Obligatoria de listas para evitar errores
     public Hospital() {
         this.teams = new ArrayList<>();
         this.wards = new ArrayList<>();
-        this.patients = new ArrayList<>();
     }
-  
-  //setter
-  // El main dice: hospital.addTeam(0, 10); - El primer número es el ID del equipo y el segundo es el ID del médico líder.
-  //Es una composición porque el Hospital crea el equipo y el equipo nace con su líder.
-  public void addTeam(int teamId, int leaderId) {
-    // Creamos al líder (ConsultantDoctor)
-    ConsultantDoctor leader = new ConsultantDoctor(leaderId);
     
-    // Creamos el equipo y le pasamos su líder
-    Team newTeam = new Team(teamId, leader);
+    private Doctor getDoctor(int doctorId) {
+        for (Team team : this.teams) {
+            for (Doctor doctor : team.getDoctors()) {
+                if (doctor.getId() == doctorId) {
+                    return doctor;
+                }
+            }
+        }
+        return null;
+    }
     
-    // Lo guardamos en la lista del Hospital
-    this.teams.add(newTeam);
-}
-  // Método de Búsqueda. El main usa mucho hospital.getTeam(0)
-  public Team getTeam(int id) {
-    for (Team t : teams) {
-        if (t.getId() == id) {
-            return t; // Retorna el objeto completo, no solo el ID
+    public Patient getPatient(int patientId) {
+    // Busca en cada equipo del hospital...
+    for (Team team : this.teams) {
+        // ... y en cada paciente de ese equipo
+        for (Patient patient : team.getPatients()) {
+            if (patient.getId() == patientId) {
+                return patient; // Si lo encuentra, lo devuelve
+            }
         }
     }
-    return null; // Si no lo encuentra
+    return null; // Si termina y no lo vio, devuelve nada
 }
-  // En el main --> hospital.addPatient(hospital.getWard(10), hospital.getTeam(0), 20);.
-  // Aquí el Hospital no crea el Ward ni el Team en ese momento, sino que recibe los que ya existen.
-  public void addPatient(Ward w, Team t, int patientId) {
-    Patient newPatient = new Patient(patientId);
-      
-    // Establecemos las relaciones (Agregación)
-    newPatient.setWard(w);
-    newPatient.setTeam(t);
     
-    // Importante: El hospital guarda al paciente en su lista general
-    this.patients.add(newPatient);
+    public Team getTeam(int teamId) {
+        for (Team team : this.teams) {
+            if (team.getId() == teamId) {
+                return team;
+            }
+        }
+        return null;
+    }
+    
+    public Ward getWard(int wardId) {
+        for (Ward ward : this.wards) {
+            if (ward.getId() == wardId) {
+                return ward;
+            }
+        }
+        return null;
+    }
+    
+    public boolean addJuniorDoctor(Team team, int doctorId) {
+        JuniorDoctor juniorDoctor = new JuniorDoctor(doctorId, team);
+        return true;
+    }
+    
+    public boolean addPatient(Ward ward, Team team, int patientId) {
+        Patient patient = new Patient(patientId, team, ward);
+        return true;
+    }
+    // Composicipón: En addTeam, el Hospital crea el equipo y, al mismo tiempo, nace el médico líder
+    public boolean addTeam(int teamId, int consultantDoctorId) {
+      Team team = new Team(teamId); // Nace el equipo
+      // El líder nace asociado a ese equipo inmediatamente
+      ConsultantDoctor consultantDoctor = new ConsultantDoctor(consultantDoctorId, team);
+      this.teams.add(team); // Se guarda en la lista del Hospital
+      return true;
 }
-  // El main pide hospital.numberDoctorsPatient();.
-  public void numberDoctorsPatient() {
-      //Para cada elemento p de tipo Patient que esté en mi Lista patients, haz lo siguiente...
-    for (Patient p : patients) {
-        // p.getDoctors() devuelve el ArrayList de doctores del paciente
-        int cantidad = p.getDoctors().size(); 
-        System.out.println("Patient " + p.getId() + " has " + cantidad + " doctors");
+    
+    public boolean addWard(int wardId) {
+        this.wards.add(new Ward(wardId));
+        return true;
+    }
+    
+    public boolean assignAppoiment(Patient patient, int idDoctorPlus) {
+        int teamId = patient.getTeam().getId();
+        Doctor doctor = this.getDoctor(teamId + idDoctorPlus);
+        
+        Appoiment appoiment = new Appoiment(doctor, patient);
+        
+        return true;
+    }
+    
+   // Agregación
+   public boolean assignPatientDoctor(Patient patient, int idDoctorPlus) {
+      int teamId = patient.getTeam().getId();
+      // Usa el método de búsqueda interna getDoctor
+      Doctor doctor = this.getDoctor(teamId + idDoctorPlus);
+    
+      // Establece la relación en ambos sentidos (Bidireccional)
+      patient.addDoctor(doctor);
+      doctor.addPatient(patient);
+      return true;
+}
+    
+   public void numberDoctorsPatient() {
+    for (Ward ward : this.wards) {
+        for (Patient patient : ward.getPatients()) {
+            // Llama a un método que debe estar dentro de la clase Patient
+            System.out.println("Patient " + patient.getId() + " has " + patient.numberOfDoctors() + " doctors");
+            //Nota: el profesor usó  patient.numberOfDoctors() en lugar de patient.getDoctors().size()
+        }
     }
 }
+    
+    public void numberPatientsTeam() {
+        for (Team team : this.teams) {
+            System.out.println("Team " + team.getId() + " has " + team.numberOfPatients() + " patients");
+        }
+    }
+    
+    public void relationAppoiments() {
+        for (Ward ward : this.wards) {
+            for (Patient patient : ward.getPatients()) {
+                int numberOfAppoiments = patient.numberOfAppoiments();
+                System.out.println("Patient " + patient.getId() + " has " + numberOfAppoiments + " appoiments");
+                if (numberOfAppoiments > 0) {
+                    ArrayList<Integer> doctorsId = patient.getDoctorsId();
+                    for (Integer doctorId : doctorsId) {
+                        System.out.println("Patient " + patient.getId() + " has an appoiment with the doctor " + doctorId);
+                    }
+                }
+            }
+        }
+    }
+    
 }
