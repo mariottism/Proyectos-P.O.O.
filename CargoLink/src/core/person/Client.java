@@ -6,7 +6,7 @@ public class Client {
   private ArrayList<Shipping> shippings;
 
   //Constructor 
-  public Client(int id, String name, String address, String email, Shipping shipping){
+  public Client(int id, String name, String address, String email) {
     this.id = id;
     this.name = name;
     this.address = address;
