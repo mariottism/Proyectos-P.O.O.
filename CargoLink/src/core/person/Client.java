@@ -20,6 +20,7 @@ public class Client {
     // this: el cliente esta creando el envío
     Shipping shipping = new Shipping(code, this, originCenter, destinationCenter, registrationDate, deliveryDate, status, vehicle);
     this.shippings.add(shipping); 
+    vehicle.addShipping(shipping); // Para que el metodo en CargoLink sea completamente correcto SI NO estara vacio en vehicle
   }
 
   //Getter busca en la lista shippings con un codigo especifico. Sin recorrer toda la lista retorna al encontrar
