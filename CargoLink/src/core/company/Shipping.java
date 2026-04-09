@@ -50,5 +50,25 @@ public class Shipping{
     return total;
 }
 
+  //Getters necesarios
+public Vehicle getVehicle() {
+    return vehicle;
+}
+
+public ArrayList<Package> getPackages() {
+    return packages;
+}
+
+public LogisticsCenter getOriginCenter() {
+    return originCenter;
+}
+
+public LogisticsCenter getDestinationCenter() {
+    return destinationCenter;
+}
+
+public LocalDate getRegistrationDate() {
+    return registrationDate;
+}
 }
 
