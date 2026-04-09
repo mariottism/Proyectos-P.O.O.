@@ -1,7 +1,7 @@
 public class Package {
 
     private float weight;
-    private Content content;
+    private Content type;
     private float value;
 
     public Package(float weight, Content content, float value) {
@@ -16,7 +16,7 @@ public class Package {
     }
 
     public Content getContent() {
-        return content;
+        return type;
     }
 
     public float getValue() {
