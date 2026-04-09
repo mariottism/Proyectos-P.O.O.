@@ -32,5 +32,17 @@ public class Client {
     }
     return null; // ó System.out.println("Shipping not found");
 }
+  //Getters necesarios
+public ArrayList<Shipping> getShippings() {
+    return shippings;
+}
+
+public int getId() {
+    return id;
+}
+
+public String getName() {
+    return name;
+}
 
 }
