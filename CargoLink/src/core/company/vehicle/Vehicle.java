@@ -5,7 +5,7 @@ public abstract class Vehicle {
     protected float cargoCapacity;
     protected ArrayList<Shipping> shippings; // Para relación bidireccional
 
-    public Vehicle(double cargoCapacity) {
+    public Vehicle(float cargoCapacity) {
         this.cargoCapacity = cargoCapacity;
         this.shippings = new ArrayList<>();
     }
